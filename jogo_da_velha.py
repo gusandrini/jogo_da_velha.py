@@ -1,6 +1,19 @@
+# FIAP
+# ADS - 2° semestre de 2024
+# Prof. Fernando Almeida
+
+# Checkpoint 4
+# Arquivo: jogo_da_velha(1).py
+
+# Eduarda Tiemi Akamini Machado
+# Gustavo de Oliveira Turci Sandrini
+# Vitor Viniciues Almeida de Araujo
+
+# 1 de Setembro de 2024
+
 jogadores = ['X','O']
 usuario = 0
-jogadas = 0
+
 
 def inicializarTabuleiro():
     # Função que inicializa o tabuleiro, isto é, prepara o tabuleiro a jogada
@@ -16,7 +29,7 @@ def imprimirTabuleiro(tabuleiro):
     print(f"{tabuleiro[2][0]} | {tabuleiro[2][1]} | {tabuleiro[2][2]}")
 
 def imprimirMenuPrincipal():
-  # Função que imprime o menu principal do jogo
+    # Função que imprime o menu principal do jogo
     print('Bem-vindo ao jogo da velha!')    
 
 # def leiaCoordenadaLinha():
@@ -28,49 +41,71 @@ def imprimirMenuPrincipal():
 # def imprimePontuacao():
 
 
-# def posicaoValida():
+#def posicaoValida():
+    
 
-# def verificaVencedor(tabuleiro, jogadorAtual):
+def verificaVencedor(tabuleiro, jogadorAtual):
+    # Verifica as linhas
+    for i in range(3):
+        if tabuleiro[i][0] == tabuleiro[i][1] == tabuleiro[i][2] == jogadorAtual:
+            return True
+    # Verifica as colunas
+    for i in range(3):
+        if tabuleiro[0][i] == tabuleiro[1][i] == tabuleiro[2][i] == jogadorAtual:
+            return True
+    # Verifica as diagonais
+    if tabuleiro[0][0] == tabuleiro[1][1] == tabuleiro[2][2] == jogadorAtual:
+        return True
+    if tabuleiro[0][2] == tabuleiro[1][1] == tabuleiro[2][0] == jogadorAtual:
+        return True
+    return False
+    
 
-def verificaVelha(tabuleiro):
-    if(jogadas == 9):
+def verificaVelha(tabuleiro, jogadas):
+    if jogadas == 9:
         imprimirTabuleiro(tabuleiro)
         print('Deu velha!')
 
-# def modoJogador():
+#def modoJogador():
 
 # def modoFacil():
 
 # def modoDificil():
 
 def movimentoIndice(movimento):
-    mov = int(movimento) - 1
+    movimento -= 1
+    linha = movimento // 3
+    coluna = movimento % 3
+    return linha, coluna
 
 
-def jogar(tabuleiro, jogadores):
+def jogar(tabuleiro, jogadores, usuario):
+    jogadas = 0
     while jogadas < 9:
         imprimirTabuleiro(tabuleiro)
         jogadorAtual = jogadores[usuario]
-        movimento = input(f"Jogador {jogadorAtual}, escolha uma posição (1-9): ")
+        movimento = int(input(f"Jogador {jogadorAtual}, escolha uma posição (1-9): "))
 
-        if movimento() and int(movimento) in range(1, 10):
-            movimento = str(int(movimento))  # Certifica-se de que o movimento é uma string
-
-            if tabuleiro.get(movimento) == ' ':
-                tabuleiro[movimento] = jogadorAtual
+        # if movimento() and int(movimento) in range(1, 10):
+        #     movimento = str(int(movimento))  # Certifica-se de que o movimento é uma string
+        if 1 <= movimento <= 9:
+            linha, coluna = movimentoIndice(movimento)
+            if tabuleiro[linha][coluna] == ' ':
+                tabuleiro[linha][coluna] = jogadorAtual
                 jogadas += 1
-                if verificarVencedor(tabuleiro, jogadorAtual):
+                if verificaVencedor(tabuleiro, jogadorAtual):
                     imprimirTabuleiro(tabuleiro)
                     print(f"Jogador {jogadorAtual} venceu!")
-                return
-            # Alternar o jogador
-                indiceJogador = 1 - indiceJogador # Alterna entre 0 e 1
+                    return
+                usuario = 1 - usuario
             else:
-                print("Posição inválida, tente novamente.")
+                print("Está posição já está ocupada, tente novamente.")
         else:
-            print("Entrada inválida. Escolha uma posição entre 1 e 9.")
-    return movimento
+            print("Movimento inválido, tente novamente.")
+    
+    verificaVelha(tabuleiro, jogadas)
 
+    return movimento, jogadas
 
 # def jogadaUsuario():
 
@@ -80,5 +115,5 @@ def jogar(tabuleiro, jogadores):
 
 imprimirMenuPrincipal()
 tabuleiro = inicializarTabuleiro()
-jogo = jogar(tabuleiro, jogadores)
+jogo = jogar(tabuleiro, jogadores, usuario)
 imprimirTabuleiro(tabuleiro)
