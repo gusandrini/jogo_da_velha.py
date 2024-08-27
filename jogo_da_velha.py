@@ -13,6 +13,8 @@
 
 jogadores = ['X','O']
 usuario = 0
+usuario2 = 0
+import random
 
 
 def inicializarTabuleiro():
@@ -68,7 +70,6 @@ def verificaVelha(tabuleiro, jogadas):
 
 #def modoJogador():
 
-# def modoFacil():
 
 # def modoDificil():
 
@@ -79,15 +80,43 @@ def movimentoIndice(movimento):
     return linha, coluna
 
 
-def jogar(tabuleiro, jogadores, usuario):
+# def jogar(tabuleiro, jogadores, usuario):
+#     jogadas = 0
+#     while jogadas < 9:
+#         imprimirTabuleiro(tabuleiro)
+#         jogadorAtual = jogadores[usuario]
+#         movimento = int(input(f"Jogador {jogadorAtual}, escolha uma posição (1-9): "))
+
+
+#         if 1 <= movimento <= 9:
+#             linha, coluna = movimentoIndice(movimento)
+#             if tabuleiro[linha][coluna] == ' ':
+#                 tabuleiro[linha][coluna] = jogadorAtual
+#                 jogadas += 1
+#                 if verificaVencedor(tabuleiro, jogadorAtual):
+#                     imprimirTabuleiro(tabuleiro)
+#                     print(f"Jogador {jogadorAtual} venceu!")
+#                     return
+#                 usuario = 1 - usuario
+#             else:
+#                 print("Está posição já está ocupada, tente novamente.")
+#         else:
+#             print("Movimento inválido, tente novamente.")
+    
+#     verificaVelha(tabuleiro, jogadas)
+
+#     return movimento, jogadas
+
+
+def modoFacil(tabuleiro, jogadores, usuario, usuario2):
     jogadas = 0
     while jogadas < 9:
         imprimirTabuleiro(tabuleiro)
+        
+        # Movimento do usuário
         jogadorAtual = jogadores[usuario]
         movimento = int(input(f"Jogador {jogadorAtual}, escolha uma posição (1-9): "))
-
-        # if movimento() and int(movimento) in range(1, 10):
-        #     movimento = str(int(movimento))  # Certifica-se de que o movimento é uma string
+        
         if 1 <= movimento <= 9:
             linha, coluna = movimentoIndice(movimento)
             if tabuleiro[linha][coluna] == ' ':
@@ -97,15 +126,35 @@ def jogar(tabuleiro, jogadores, usuario):
                     imprimirTabuleiro(tabuleiro)
                     print(f"Jogador {jogadorAtual} venceu!")
                     return
-                usuario = 1 - usuario
             else:
-                print("Está posição já está ocupada, tente novamente.")
+                print("Essa posição já está ocupada, tente novamente.")
+                continue
         else:
             print("Movimento inválido, tente novamente.")
-    
+            continue
+        
+        if jogadas >= 9:
+            break  # Se o tabuleiro estiver cheio, saia do loop.
+
+        # Movimento da máquina
+        jogadorVirtual = jogadores[usuario2]
+        while True:
+            movimentoMaqui = random.randint(1, 9)
+            linha, coluna = movimentoIndice(movimentoMaqui)
+            if tabuleiro[linha][coluna] == ' ':
+                tabuleiro[linha][coluna] = jogadorVirtual
+                jogadas += 1
+                if verificaVencedor(tabuleiro, jogadorVirtual):
+                    imprimirTabuleiro(tabuleiro)
+                    print(f"Jogador {jogadorVirtual} venceu!")
+                    return
+                break  # Saia do loop da máquina se a jogada foi válida
+            else:
+                movimentoMaqui = random.randint(1, 9)  # Tente novamente com outro número
+
     verificaVelha(tabuleiro, jogadas)
 
-    return movimento, jogadas
+    return jogadas
 
 # def jogadaUsuario():
 
@@ -115,5 +164,6 @@ def jogar(tabuleiro, jogadores, usuario):
 
 imprimirMenuPrincipal()
 tabuleiro = inicializarTabuleiro()
-jogo = jogar(tabuleiro, jogadores, usuario)
+#jogo = jogar(tabuleiro, jogadores, usuario)
+jogo = modoFacil(tabuleiro, ['X', 'O'], 0, 1)
 imprimirTabuleiro(tabuleiro)
